@@ -1,0 +1,27 @@
+CREATE TABLE art (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	nsfw BOOLEAN DEFAULT 0,
+	alt_text VARCHAR(255)
+);
+CREATE TABLE sqlite_sequence(name,seq);
+CREATE TABLE artists (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	username VARCHAR(63),
+	link VARCHAR(63)
+);
+CREATE TABLE credit (
+	art_id INT,
+	artist_id INT, 
+	FOREIGN KEY(art_id) REFERENCES art(id),
+	FOREIGN KEY(artist_id) REFERENCES artists(id));
+CREATE TABLE characters (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name VARCHAR(63),
+	icon_path VARCHAR(63)
+);
+CREATE TABLE contains (
+	art_id INT, 
+	char_id INT,
+	FOREIGN KEY(art_id) REFERENCES art(id),
+	FOREIGN KEY(char_id) REFERENCES characters(id)
+);

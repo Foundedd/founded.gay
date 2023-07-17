@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Founded's Commissioned Art</title>
+    <link rel="stylesheet" href="gallery-style.css">
+</head>
+<body onload="load_gallery()">
+    <div class="full-image" id="FullImageDiv">
+        <img src="data:," alt="alt text" id="FullImage">
+        <span onclick="close_full_image()">X</span>
+
+    </div>
+    <div class="gallery" id="Gallery">
+    </div>
+    <script>
+        const URL = "https://localhost:8000"
+        function load_gallery() {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    document.getElementById("Gallery").innerHTML = xhr.responseText;
+                }
+            }
+            xhr.open('GET', URL + '/images.html');
+            xhr.send();
+        }
+    </script>
+    <script>
+        let full_image_div = document.getElementById("FullImageDiv");
+        let full_image = document.getElementById("FullImage");
+
+        function open_full_image(image) {
+            full_image_div.style.display = "flex";
+            full_image.src = image;
+        }
+
+        function close_full_image() {
+            full_image_div.style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
