@@ -1,0 +1,25 @@
+html
+    head
+        title= title
+        meta(charset="UTF-8")
+        link(rel='stylesheet' href='gallery-style.css')
+    body
+        div(class="full-image" id="FullImageDiv" style="display:none")
+            img(src="data:", alt="alt text", id="FullImage")
+            span(onclick="close_full_image()") X
+        div(class="gallery" id="Gallery")
+            img(src="/images/image_1.jpeg", onclick="open_full_image(this.src)")
+            img(src="/images/image_2.jpeg", onclick="open_full_image(this.src)")
+
+        script.
+            let full_image_div = document.getElementById("FullImageDiv");
+            let full_image = document.getElementById("FullImage");
+
+            function open_full_image(image) {
+                full_image_div.style.display = "flex";
+                full_image.src = image;
+            }
+
+            function close_full_image() {
+                full_image_div.style.display = "none";
+            }

@@ -1,7 +1,21 @@
 const sqlite3 = require('sqlite3');
 const express = require('express');
+const pug = require('pug')
+const path = require('path');
 
 const app = express();
+app.set('view engine', 'pug');
+const port = 8000
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(express.static(__dirname));
+
+app.get('/', (req, res) => {
+    res.render('gallery_template',
+        {title: 'Founded\'s Commissioned Art'})
+});
+
+
 let db = new sqlite3.Database('./database/images.sqlite', (err) => {
     if (err) {
         return console.error(err.message);
@@ -17,13 +31,15 @@ app.route('/images/')
             sql = `SELECT art.fname FROM ((art INNER JOIN contains ON art.art_id = contains.art_id)
 INNER JOIN characters ON contains.char_id = characters.char_id)`
         } else {
-            sql = `SELECT art.fname, art.nsfw, art.alt_text FROM 
+            sql = `SELECT art.fname, art.nsfw, art.alt_text FROM
 ((art INNER JOIN contains ON art.art_id = contains.art_id)
-INNER JOIN characters ON contains.char_id = characters.char_id) 
+INNER JOIN characters ON contains.char_id = characters.char_id)
 WHERE characters.name = ${character}`;
         }
 
         let filenames = db.all(sql);
+
+
 
     })
     .post((req, res) => {
@@ -39,4 +55,8 @@ db.close((err) => {
         return console.error(err.message);
     }
     console.log('Closed connection to database')
+})
+
+app.listen(port, () => {
+    console.log(`Listening on ${port}`)
 })

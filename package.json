@@ -1,6 +1,25 @@
 {
   "dependencies": {
     "express": "^4.18.2",
+    "pug": "^3.0.2",
     "sqlite3": "^5.1.6"
-  }
+  },
+  "name": "founded.gay",
+  "description": "my website omg",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Foundedd/founded.gay.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Foundedd/founded.gay/issues"
+  },
+  "homepage": "https://github.com/Foundedd/founded.gay#readme"
 }
