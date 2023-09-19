@@ -1,3 +1,5 @@
 images
 .idea
 node_modules
+database/gallery.db
+database/gallery.sqbpro
