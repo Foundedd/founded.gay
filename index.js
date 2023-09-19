@@ -2,45 +2,52 @@ const sqlite3 = require('sqlite3');
 const express = require('express');
 const pug = require('pug')
 const path = require('path');
+const db = require('./database.js')
 
 const app = express();
 app.set('view engine', 'pug');
 const port = 8000
 
+
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use(express.static(__dirname));
+// app.use(express.static(__dirname));
 
 app.get('/', (req, res) => {
     res.render('gallery_template',
-        {title: 'Founded\'s Commissioned Art'})
+        {title: 'Founded\'s Homepage'})
 });
 
-
-let db = new sqlite3.Database('./database/images.sqlite', (err) => {
-    if (err) {
-        return console.error(err.message);
-    }
-    console.log('Connected to image database');
-});
 
 app.route('/images/')
     .get((req, res) => {
         let sql;
         let character = req.query.character || 'all';
         if (character === 'all') {
-            sql = `SELECT art.fname FROM ((art INNER JOIN contains ON art.art_id = contains.art_id)
-INNER JOIN characters ON contains.char_id = characters.char_id)`
+            sql = `SELECT DISTINCT art.fname, art.id FROM ((art INNER JOIN contains ON art.id = contains.art_id));`
         } else {
-            sql = `SELECT art.fname, art.nsfw, art.alt_text FROM
-((art INNER JOIN contains ON art.art_id = contains.art_id)
-INNER JOIN characters ON contains.char_id = characters.char_id)
-WHERE characters.name = ${character}`;
+            sql = `SELECT DISTINCT art.fname, art.nsfw, art.alt_text FROM
+            ((art INNER JOIN contains ON art.id = contains.art_id)
+            INNER JOIN characters ON contains.char_id = characters.id)
+            WHERE characters.name == "${character}";`
         }
 
-        let filenames = db.all(sql);
+        db.all(sql, [], (err, rows) => {
+            if (err) {
+                res.status(400);
+                return;
+            }
+            let filenames = {};
+            rows.forEach(function(row) {
+                filenames[row.id] = row.fname;
+            })
 
-
-
+            res.render('gallery_template', 
+            {
+                title: 'Founded\'s Commissioned Art', 
+                art_filenames: filenames}
+            );;
+        })
     })
     .post((req, res) => {
         res.send('This should authenticate me somehow, then add image to database')
@@ -50,12 +57,7 @@ WHERE characters.name = ${character}`;
     })
 
 
-db.close((err) => {
-    if (err) {
-        return console.error(err.message);
-    }
-    console.log('Closed connection to database')
-})
+
 
 app.listen(port, () => {
     console.log(`Listening on ${port}`)

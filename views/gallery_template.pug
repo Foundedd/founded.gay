@@ -2,14 +2,17 @@ html
     head
         title= title
         meta(charset="UTF-8")
-        link(rel='stylesheet' href='gallery-style.css')
+        link(rel='stylesheet' href='/public/gallery-style.css')
     body
         div(class="full-image" id="FullImageDiv" style="display:none")
             img(src="data:", alt="alt text", id="FullImage")
             span(onclick="close_full_image()") X
-        div(class="gallery" id="Gallery")
-            img(src="/images/image_1.jpeg", onclick="open_full_image(this.src)")
-            img(src="/images/image_2.jpeg", onclick="open_full_image(this.src)")
+        - var filenames = art_filenames
+        div(class="gallery" id="gallery", width="80%", margin="100px auto 50px", display="grid", grid-template-columns="repeat(auto-fit), minmix(250px, 1fr)", grid-gap="30px")
+            each name in filenames
+                img(src=name, alt="alt text", onclick="open_full_image(this.src)", width="100%", cursor="pointer")
+            else 
+                li No images
 
         script.
             let full_image_div = document.getElementById("FullImageDiv");
