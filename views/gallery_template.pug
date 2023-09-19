@@ -7,7 +7,7 @@ html
         div(class="full-image" id="FullImageDiv" style="display:none")
             img(src="data:", alt="alt text", id="FullImage")
             span(onclick="close_full_image()") X
-        - var filenames = art_filenames
+        - let filenames = art_filenames
         div(class="gallery" id="gallery", width="80%", margin="100px auto 50px", display="grid", grid-template-columns="repeat(auto-fit), minmix(250px, 1fr)", grid-gap="30px")
             each name in filenames
                 img(src=name, alt="alt text", onclick="open_full_image(this.src)", width="100%", cursor="pointer")

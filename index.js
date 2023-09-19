@@ -11,11 +11,13 @@ const port = 8000
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
-// app.use(express.static(__dirname));
 
 app.get('/', (req, res) => {
-    res.render('gallery_template',
-        {title: 'Founded\'s Homepage'})
+    res.render('home_view',
+        {
+            title: 'Founded\'s Homepage',
+            welcome_message: "Hi I'm Founded"
+        })
 });
 
 
